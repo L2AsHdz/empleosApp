@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/layout :: layout(~{::title}, ~{::div}, ~{::link}, ~{::script})">
+    <head>
+        <title>EmpleosApp | Creacion de categoria</title>
+        <link rel="stylesheet" href="">
+    </head>
+
+    <body>
+
+    <div>
+        <main role="main">
+            <hr>
+            <div class="container">
+                <div class="card">
+                    <h4 class="card-header"><strong>Datos de la categoría</strong></h4>
+                    <div class="card-body">
+                        <form th:action="@{/categorias/save}" method="post" th:object="${categoria}">
+                            <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                                Por favor corrija los siguientes errores:
+                                <ul>
+                                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre</label>
+                                        <input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre" placeholder="Escriba el nombre de la categoria" required="required">
+                                        <input type="hidden" th:field="*{id}" name="id" id="id">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="descripcion">Descripción</label>
+                                        <textarea class="form-control" th:field="*{descripcion}" name="descripcion" id="descripcion" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <button type="submit" title="Guardar el registro." class="btn btn-primary">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script></script>
+    </body>
+</html>
