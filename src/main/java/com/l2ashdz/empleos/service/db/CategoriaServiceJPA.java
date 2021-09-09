@@ -4,6 +4,9 @@ import com.l2ashdz.empleos.model.Categoria;
 import com.l2ashdz.empleos.repository.CategoriaRepository;
 import com.l2ashdz.empleos.service.ICategoriaService;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +43,11 @@ public class CategoriaServiceJPA implements ICategoriaService {
     @Override
     public void delete(int id) {
         categoriaRepository.delete(Categoria.builder().id(id).build());
+    }
+
+    @Override
+    public Page<Categoria> findAll(Pageable page) {
+        return categoriaRepository.findAll(page);
     }
 
 }

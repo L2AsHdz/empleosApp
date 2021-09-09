@@ -4,6 +4,9 @@ import com.l2ashdz.empleos.model.Vacante;
 import com.l2ashdz.empleos.repository.VacanteRepository;
 import com.l2ashdz.empleos.service.IVacanteService;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +55,16 @@ public class VacanteServiceJpa implements IVacanteService {
     @Override
     public List<Vacante> findNoEliminados() {
         return vacanteRepository.findByEstatusIn(new String[] {"Aprobada", "Creada"});
+    }
+
+    @Override
+    public List<Vacante> findByExample(Example<Vacante> example) {
+        return vacanteRepository.findAll(example);
+    }
+
+    @Override
+    public Page<Vacante> findAll(Pageable page) {
+        return vacanteRepository.findAll(page);
     }
 
 }

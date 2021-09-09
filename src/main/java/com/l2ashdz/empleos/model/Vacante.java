@@ -24,11 +24,15 @@ public class Vacante {
     private LocalDate fecha;
     private Double salario;
     private Integer destacado;
-    private String imagen;
+    private String imagen = "no-image.png";
     private String detalles;
     //@Transient
     @OneToOne
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
+
+    public void reset() {
+        this.imagen = null;
+    }
 
 }

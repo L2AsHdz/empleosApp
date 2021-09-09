@@ -2,7 +2,8 @@ package com.l2ashdz.empleos.controller;
 
 import com.l2ashdz.empleos.model.Categoria;
 import com.l2ashdz.empleos.service.ICategoriaService;
-import org.dom4j.rule.Mode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,13 @@ public class CategoriasController {
     @GetMapping("/index")
     public String mostrarIndex(Model model) {
         model.addAttribute("categorias", categoriaService.findAll());
+        return "categorias/listCategorias";
+    }
+
+    @GetMapping("/indexPaginate")
+    public String indexPaginated(Model model, Pageable page) {
+        Page<Categoria> categorias = categoriaService.findAll(page);
+        model.addAttribute("categorias", categorias);
         return "categorias/listCategorias";
     }
 

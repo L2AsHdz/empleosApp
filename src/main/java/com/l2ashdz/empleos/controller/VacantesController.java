@@ -5,7 +5,10 @@ import static com.l2ashdz.utils.FileController.saveMultipartFileSpring;
 import com.l2ashdz.empleos.model.Vacante;
 import com.l2ashdz.empleos.service.ICategoriaService;
 import com.l2ashdz.empleos.service.IVacanteService;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,6 +87,13 @@ public class VacantesController {
     @GetMapping("/index")
     public String mostrarIndex(Model model) {
         model.addAttribute("vacantes", vacanteService.findNoEliminados());
+        return "vacantes/listVacantes";
+    }
+
+    @GetMapping("/indexPaginate")
+    public String indexPaginate(Model model, Pageable page) {
+        Page<Vacante> vacantes = vacanteService.findAll(page);
+        model.addAttribute("vacantes", vacantes);
         return "vacantes/listVacantes";
     }
 

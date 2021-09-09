@@ -3,11 +3,18 @@ package com.l2ashdz.empleos.controller;
 import com.l2ashdz.empleos.model.Perfil;
 import com.l2ashdz.empleos.model.Usuario;
 import com.l2ashdz.empleos.model.Vacante;
+import com.l2ashdz.empleos.service.ICategoriaService;
 import com.l2ashdz.empleos.service.IUsuarioService;
 import com.l2ashdz.empleos.service.IVacanteService;
+import org.dom4j.rule.Mode;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,17 +28,16 @@ public class HomeController {
 
     private IVacanteService vacanteService;
     private IUsuarioService usuarioService;
+    private ICategoriaService categoriaService;
 
-    public HomeController(IVacanteService vacanteService, IUsuarioService usuarioService) {
+    public HomeController(IVacanteService vacanteService, IUsuarioService usuarioService, ICategoriaService categoriaService) {
         this.vacanteService = vacanteService;
         this.usuarioService = usuarioService;
+        this.categoriaService = categoriaService;
     }
 
     @GetMapping({"/", "", "home"})
     public String goHome(Model model) {
-        List<Vacante> vacantes = vacanteService.findDestacados();
-        model.addAttribute("vacantes", vacantes);
-
         return "home";
     }
 
@@ -82,4 +88,26 @@ public class HomeController {
         return "redirect:/usuarios/index";
     }
 
+    @GetMapping("/search")
+    public String buscar(@ModelAttribute("search") Vacante vacante, Model model) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("descripcion", ExampleMatcher.GenericPropertyMatchers.contains());
+        Example<Vacante> vacanteExample = Example.of(vacante, matcher);
+        List<Vacante> vacantes = vacanteService.findByExample(vacanteExample);
+        model.addAttribute("vacantes", vacantes);
+        return "home";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
+
+    @ModelAttribute
+    public void setAttributes(Model model) {
+        Vacante vacante = Vacante.builder().build();
+        vacante.reset();
+        model.addAttribute("search", vacante);
+        model.addAttribute("categorias", categoriaService.findAll());
+        model.addAttribute("vacantes", vacanteService.findDestacados());
+    }
 }
