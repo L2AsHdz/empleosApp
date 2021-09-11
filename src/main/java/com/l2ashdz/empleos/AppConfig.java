@@ -1,6 +1,6 @@
 package com.l2ashdz.empleos;
 
-import com.l2ashdz.empleos.other.LocalDateFormatter;
+import com.l2ashdz.empleos.formatter.LocalDateFormatter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;

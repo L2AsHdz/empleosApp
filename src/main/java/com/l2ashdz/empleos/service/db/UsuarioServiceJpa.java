@@ -30,4 +30,9 @@ public class UsuarioServiceJpa implements IUsuarioService {
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
+
+    @Override
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsername(username);
+    }
 }

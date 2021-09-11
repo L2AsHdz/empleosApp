@@ -8,4 +8,5 @@ public interface IUsuarioService {
     void save(Usuario u);
     void delete(int id);
     List<Usuario> findAll();
+    Usuario findByUsername(String username);
 }

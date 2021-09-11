@@ -10,15 +10,17 @@ import org.dom4j.rule.Mode;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +28,19 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    private IVacanteService vacanteService;
-    private IUsuarioService usuarioService;
-    private ICategoriaService categoriaService;
+    private final IVacanteService vacanteService;
+    private final IUsuarioService usuarioService;
+    private final ICategoriaService categoriaService;
+    private final PasswordEncoder passwordEncoder;
 
-    public HomeController(IVacanteService vacanteService, IUsuarioService usuarioService, ICategoriaService categoriaService) {
+    public HomeController(IVacanteService vacanteService, IUsuarioService usuarioService, ICategoriaService categoriaService, PasswordEncoder passwordEncoder) {
         this.vacanteService = vacanteService;
         this.usuarioService = usuarioService;
         this.categoriaService = categoriaService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping({"/", "", "home"})
+    @GetMapping({"/", "", "/home"})
     public String goHome(Model model) {
         return "home";
     }
@@ -80,12 +84,15 @@ public class HomeController {
 
     @PostMapping("/singup")
     public String saveRegistro(@ModelAttribute Usuario usuario, RedirectAttributes attributes) {
+        String password = usuario.getPassword();
+        String encrypt = passwordEncoder.encode(password);
+        usuario.setPassword(encrypt);
         usuario.addPerfil(Perfil.builder().id(3).build());
         usuario.setFechaRegistro(LocalDate.now());
         usuario.setEstatus(1);
         usuarioService.save(usuario);
         attributes.addFlashAttribute("msg", "El usuario se registro correctamente");
-        return "redirect:/usuarios/index";
+        return "redirect:/";
     }
 
     @GetMapping("/search")
@@ -101,6 +108,38 @@ public class HomeController {
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
+
+    @GetMapping("/index")
+    public String mostrarIndex(Authentication auth, HttpSession session) {
+        String username = auth.getName();
+        System.out.println(username);
+        auth.getAuthorities().forEach(rol -> System.out.println("Rol: " + rol.getAuthority()));
+
+        if (session.getAttribute("user") == null) {
+            Usuario usuario = usuarioService.findByUsername(username);
+            usuario.setPassword(null);
+            session.setAttribute("user", usuario);
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "formLogin";
+    }
+
+    @GetMapping("/logout")
+    public String logOut(HttpServletRequest request) {
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(request, null, null);
+        return "redirect:/login";
+    }
+
+    /*@GetMapping("/bcrypt/{texto}")
+    @ResponseBody
+    public String encriptar(@PathVariable("texto") String texto) {
+        return texto + " -> BCrypt -> " + passwordEncoder.encode(texto);
+    }*/
 
     @ModelAttribute
     public void setAttributes(Model model) {

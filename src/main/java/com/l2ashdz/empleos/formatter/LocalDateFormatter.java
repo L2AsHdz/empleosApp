@@ -1,4 +1,4 @@
-package com.l2ashdz.empleos.other;
+package com.l2ashdz.empleos.formatter;
 
 import org.springframework.format.Formatter;
 
