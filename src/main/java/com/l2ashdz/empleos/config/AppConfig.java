@@ -1,4 +1,4 @@
-package com.l2ashdz.empleos;
+package com.l2ashdz.empleos.config;
 
 import com.l2ashdz.empleos.formatter.LocalDateFormatter;
 import org.springframework.beans.factory.annotation.Value;

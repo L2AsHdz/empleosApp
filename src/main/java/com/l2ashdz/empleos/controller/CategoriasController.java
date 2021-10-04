@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/categorias")
 public class CategoriasController {
@@ -39,9 +41,8 @@ public class CategoriasController {
     }
 
     @PostMapping("/save")
-    public String guardar(@ModelAttribute("categoria") Categoria categoria, BindingResult result, RedirectAttributes attributes) {
+        public String guardar(@Valid @ModelAttribute Categoria categoria, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(e -> System.out.println(e.getDefaultMessage()));
             return "categorias/formCategoria";
         }
         categoriaService.save(categoria);

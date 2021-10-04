@@ -5,7 +5,6 @@ import static com.l2ashdz.utils.FileController.saveMultipartFileSpring;
 import com.l2ashdz.empleos.model.Vacante;
 import com.l2ashdz.empleos.service.ICategoriaService;
 import com.l2ashdz.empleos.service.IVacanteService;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/vacantes")
@@ -49,13 +48,12 @@ public class VacantesController {
     }
 
     @PostMapping("save")
-    public String save(@ModelAttribute("vacante") Vacante vacante,
+    public String save(@Valid @ModelAttribute Vacante vacante,
                        BindingResult result,
                        RedirectAttributes attributes,
                        Model model,
                        @RequestParam("archivoImagen")MultipartFile multipartFile) {
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(e -> System.out.println(e.getDefaultMessage()));
             model.addAttribute("categorias", categoriaService.findAll());
             return "vacantes/formVacante";
         }

@@ -15,30 +15,42 @@
                 <div class="card">
                     <h4 class="card-header"><strong>Formulario de registro</strong></h4>
                     <div class="card-body">
-                        <form th:action="@{/singup}" method="post">
+                        <form th:action="@{/singup}" method="post" th:object="${usuario}">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Escriba su nombre" required="required">
+                                        <input type="text" class="form-control" id="nombre" name="nombre"
+                                               placeholder="Escriba su nombre" th:field="*{nombre}"
+                                               th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+                                        <div class="invalid-feedback" th:errors="*{nombre}"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="email">Correo electrónico</label>
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Escriba su correo electrónico" required="required">
+                                        <input type="email" class="form-control" id="email" name="email"
+                                               placeholder="Escriba su correo electrónico" th:field="*{email}"
+                                               th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+                                        <div class="invalid-feedback" th:errors="*{email}"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="username">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username" placeholder="Escriba su nombre de usuario" required="required">
+                                        <input type="text" class="form-control" id="username" name="username"
+                                               placeholder="Escriba su nombre de usuario" th:field="*{username}"
+                                               th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''">
+                                        <div class="invalid-feedback" th:errors="*{username}"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="password">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" placeholder="Escriba su clave de acceso" required="required">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                               placeholder="Escriba su clave de acceso"
+                                               th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
+                                        <div class="invalid-feedback" th:errors="*{password}"></div>
                                     </div>
                                 </div>
                             </div>

@@ -6,7 +6,6 @@ import com.l2ashdz.empleos.model.Vacante;
 import com.l2ashdz.empleos.service.ICategoriaService;
 import com.l2ashdz.empleos.service.IUsuarioService;
 import com.l2ashdz.empleos.service.IVacanteService;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -15,12 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,12 +79,15 @@ public class HomeController {
     }
 
     @GetMapping("/singup")
-    public String registrarse() {
+    public String registrarse(Usuario usuario) {
         return "formRegistro";
     }
 
     @PostMapping("/singup")
-    public String saveRegistro(@ModelAttribute Usuario usuario, RedirectAttributes attributes) {
+    public String saveRegistro(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            return "formRegistro";
+        }
         String password = usuario.getPassword();
         String encrypt = passwordEncoder.encode(password);
         usuario.setPassword(encrypt);

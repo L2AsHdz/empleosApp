@@ -14,25 +14,25 @@
                         <h4 class="card-header"><strong>Datos de la oferta de trabajo</strong></h4>
                         <div class="card-body">
                             <form th:action="@{/vacantes/save}" th:object="${vacante}" method="post" enctype="multipart/form-data">
-                                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
-                                    Por favor corrija los siguientes errores:
-                                    <ul>
-                                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-                                    </ul>
-                                </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="nombre">Nombre</label>
                                             <input type="hidden" th:field="*{id}">
                                             <input type="hidden" th:field="*{imagen}">
-                                            <input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre" placeholder="Titulo de la oferta de trabajo" required="required">
+                                            <input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre"
+                                                   placeholder="Titulo de la oferta de trabajo"
+                                                   th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+                                            <div class="invalid-feedback" th:errors="*{nombre}"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-9">
                                         <div class="form-group">
                                             <label for="descripcion">Descripción</label>
-                                            <input type="text" class="form-control" th:field="*{descripcion}" id="descripcion" name="descripcion" placeholder="Breve descripcion de la oferta de trabajo" required="required">
+                                            <input type="text" class="form-control" th:field="*{descripcion}" id="descripcion"
+                                                   name="descripcion" placeholder="Breve descripcion de la oferta de trabajo"
+                                                   th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''">
+                                            <div class="invalid-feedback" th:errors="*{descripcion}"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +61,10 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="fecha">Fecha de Publicación</label>
-                                            <input type="text" class="form-control" th:field="*{fecha}" name="fecha" id="fecha" placeholder="Fecha de publicacion" required="required">
+                                            <input type="text" class="form-control" th:field="*{fecha}" name="fecha"
+                                                   id="fecha" placeholder="Fecha de publicacion"
+                                                   th:classappend="${#fields.hasErrors('fecha')} ? 'is-invalid' : ''">
+                                            <div class="invalid-feedback" th:errors="*{fecha}"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -80,7 +83,10 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="salario">Salario Ofrecido (Aprox)</label>
-                                            <input type="text" class="form-control" th:field="*{salario}" name="salario" id="salario" placeholder="Salario aproximado." required="required">
+                                            <input type="text" class="form-control" th:field="*{salario}" name="salario"
+                                                   id="salario" placeholder="Salario aproximado."
+                                                   th:classappend="${#fields.hasErrors('salario')} ? 'is-invalid' : ''">
+                                            <div class="invalid-feedback" th:errors="*{salario}"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -95,7 +101,9 @@
                                     <div class="col-md-9">
                                         <div class="form-group">
                                             <label for="detalles"><strong>Detalles</strong></label>
-                                            <textarea class="form-control" th:field="*{detalles}" name="detalles" id="detalles" rows="7"></textarea>
+                                            <textarea class="form-control" th:field="*{detalles}" name="detalles" id="detalles" rows="7"
+                                                      th:classappend="${#fields.hasErrors('detalles')} ? 'is-invalid' : ''"></textarea>
+                                            <div class="invalid-feedback" th:errors="*{detalles}"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
